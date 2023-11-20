@@ -88,7 +88,6 @@ class UserController {
       const token = generateToken({
         id: userData.id,
         email: userData.email,
-        username: userData.username,
         full_name: userData.full_name,
       });
 
@@ -111,19 +110,10 @@ class UserController {
         });
       }
 
-      const {
-        full_name,
-        email,
-        username,
-        password,
-        profile_image_url,
-        age,
-        phone_number,
-      } = req.body;
+      const { full_name, email } = req.body;
 
       const userData = req.UserData;
 
-      // Only allow the user to update their own data
       if (userData.id !== id) {
         return res.status(403).json({
           message: 'Forbidden: You are not allowed to update this user.',
@@ -131,15 +121,7 @@ class UserController {
       }
 
       const [updatedRowsCount, updatedRows] = await User.update(
-        {
-          full_name,
-          email,
-          username,
-          password,
-          profile_image_url,
-          age,
-          phone_number,
-        },
+        { full_name, email },
         {
           where: {
             id,
@@ -149,12 +131,18 @@ class UserController {
       );
 
       if (updatedRowsCount > 0) {
-        res.status(200).json(updatedRows[0]);
+        res.status(200).json({
+          id: updatedRows[0].id,
+          full_name: updatedRows[0].full_name,
+          email: updatedRows[0].email,
+          createdAt: updatedRows[0].createdAt,
+          updatedAt: updatedRows[0].updatedAt,
+        });
       } else {
         res.status(404).json({ message: `User with id ${id} not found` });
       }
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error });
     }
   }
 
@@ -171,7 +159,6 @@ class UserController {
 
       const userData = req.UserData;
 
-      // Only allow the user to delete their own data
       if (userData.id !== id) {
         return res.status(403).json({
           message: 'Forbidden: You are not allowed to delete this user.',

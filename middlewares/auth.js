@@ -22,7 +22,6 @@ const authentication = async (req, res, next) => {
       where: {
         id: decode.id,
         email: decode.email,
-        username: decode.username,
         full_name: decode.full_name,
       },
     });
