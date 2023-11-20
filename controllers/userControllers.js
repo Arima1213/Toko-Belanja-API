@@ -1,20 +1,9 @@
 const { User, Photo } = require('../models'); // Change 'user' to 'User'
 const { generateToken } = require('../helpers/jwt');
 const { comparePassword } = require('../helpers/bcrypt');
+const formatCurrency = require('../helpers/FormatCurrency');
 
 class UserController {
-  static async getUsers(req, res) {
-    try {
-      const userData = await User.findAll({
-        include: Photo,
-      });
-
-      res.status(200).json(userData);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  }
-
   static async register(req, res) {
     try {
       const { full_name, password, gender, email } = req.body;
@@ -180,6 +169,35 @@ class UserController {
       }
     } catch (error) {
       res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async topup(req, res) {
+    try {
+      const idUser = req.UserData;
+      const { balance } = req.body;
+
+      const userData = await User.findOne({
+        where: idUser.id,
+      });
+
+      if (!Number.isInteger(balance) || balance <= 0) {
+        return res.status(400).json({ message: 'Invalid topup amount.' });
+      }
+
+      const updatedUser = await User.update(
+        { balance: userData.balance + balance },
+        { where: { id: userData.id }, returning: true }
+      );
+
+      res.status(200).json({
+        message: `Your Balance Updated Successfully to ${formatCurrency(
+          updatedUser[1][0].dataValues.balance
+        )}`,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 }

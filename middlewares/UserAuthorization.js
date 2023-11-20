@@ -23,7 +23,6 @@ function authorization(req, res, next) {
           devMessage: `user with id ${userId} not found`,
         });
       }
-      console.log(founduser.id === authenticatedUser.id);
       if (founduser.id === authenticatedUser.id) {
         return next();
       } else {
