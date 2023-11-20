@@ -17,15 +17,14 @@ class UserController {
 
   static async register(req, res) {
     try {
-      const {
-        full_name,
-        profile_image_url,
-        age,
-        phone_number,
-        username,
-        email,
-        password,
-      } = req.body;
+      const { full_name, password, gender, email } = req.body;
+
+      if (!['male', 'female'].includes(gender)) {
+        throw {
+          code: 400,
+          message: 'Invalid gender. Gender must be either "male" or "female".',
+        };
+      }
 
       const userData = await User.findOne({
         where: {
@@ -36,31 +35,20 @@ class UserController {
       if (userData) {
         throw {
           code: 404,
-          message: 'user already registered!',
+          message: 'User already registered!',
         };
       }
 
       const result = await User.create({
         full_name,
-        email,
-        username,
         password,
-        profile_image_url,
-        age,
-        phone_number,
+        gender,
+        email,
       });
 
-      res.status(201).json({
-        full_name: result.full_name,
-        email: result.email,
-        username: result.username,
-        password: result.password,
-        profile_image_url: result.profile_image_url,
-        age: result.age,
-        phone_number: result.phone_number,
-      });
+      res.status(201).json({ result });
     } catch (error) {
-      res.status(500).json(error);
+      res.status(500).json(error.message);
     }
   }
 
