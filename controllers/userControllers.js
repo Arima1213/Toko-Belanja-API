@@ -46,7 +46,14 @@ class UserController {
         email,
       });
 
-      res.status(201).json({ result });
+      res.status(201).json({
+        id: result.id,
+        full_name: result.full_name,
+        email: result.email,
+        gender: result.gender,
+        balance: result.formattedBalance,
+        createdAt: result.created,
+      });
     } catch (error) {
       res.status(500).json(error.message);
     }
