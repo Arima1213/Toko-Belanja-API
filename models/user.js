@@ -1,5 +1,7 @@
+// Assuming you have a User model defined
 const { Model } = require('sequelize');
 const { hashPassword } = require('../helpers/bcrypt');
+const formatCurrency = require('../helpers/FormatCurrency');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -37,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       role: {
         type: DataTypes.STRING,
+        defaultValue: 'customer',
         allowNull: false,
         validate: {
           isIn: [['admin', 'customer']],
@@ -44,31 +47,27 @@ module.exports = (sequelize, DataTypes) => {
       },
       balance: {
         type: DataTypes.INTEGER,
+        defaultValue: 0,
         allowNull: false,
         validate: {
           isInt: true,
-          min: 0,
-          max: 100000000,
         },
-      },
-      createdAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
-      },
-      updatedAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        defaultValue: sequelize.fn('NOW'),
       },
     },
     {
       sequelize,
-      modelName: 'Users',
+      modelName: 'User',
       hooks: {
         beforeCreate: (user) => {
+          user.role = 'customer';
+          user.balance = 0;
           const hashedPassword = hashPassword(user.password);
           user.password = hashedPassword;
+        },
+      },
+      getterMethods: {
+        formattedBalance() {
+          return formatCurrency(this.balance);
         },
       },
     }
