@@ -3,7 +3,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     static associate(models) {
-      Product.belongsTo(models.Category);
+      Product.belongsTo(models.Category, { foreignKey: 'CategoryId' });
     }
   }
 
@@ -28,6 +28,13 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isInt: true,
           min: 5,
+        },
+      },
+      CategoryId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          isInt: true,
         },
       },
     },
