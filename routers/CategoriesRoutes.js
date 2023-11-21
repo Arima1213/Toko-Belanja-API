@@ -6,4 +6,6 @@ router.post('/', authorization, CategoryController.CreateCategory);
 
 router.get('/', CategoryController.GetAllCategories);
 
+router.patch('/:id', authorization, CategoryController.UpdateOneCategoryById);
+
 module.exports = router;

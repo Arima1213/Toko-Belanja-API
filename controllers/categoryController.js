@@ -34,32 +34,25 @@ class CategoryController {
   //     }
   //   }
 
-  //   static async UpdateOneCategoryById(req, res) {
-  //     const userData = req.UserData;
-  //     console.log(userData.id);
+  static async UpdateOneCategoryById(req, res) {
+    const { id } = req.params;
+    const { type } = req.body;
 
-  //     const { id } = req.params;
-  //     const { Category, PhotoId } = req.body;
-  //     console.log(Category);
+    try {
+      const [updatedRowsCount, updatedRows] = await Category.update(
+        { type: type },
+        { where: { id }, returning: true }
+      );
 
-  //     try {
-  //       const [updatedRowsCount, updatedRows] = await Category.update(
-  //         { Category, UserId: userData.id, PhotoId },
-  //         { where: { id }, returning: true }
-  //       );
-
-  //       console.log(updatedRowsCount);
-  //       console.log(updatedRows);
-
-  //       if (updatedRowsCount > 0) {
-  //         res.status(200).json(updatedRows[0]);
-  //       } else {
-  //         res.status(404).json({ message: `Category with id ${id} not found` });
-  //       }
-  //     } catch (error) {
-  //       res.status(500).json({ message: error.message });
-  //     }
-  //   }
+      if (updatedRowsCount > 0) {
+        res.status(200).json(updatedRows[0]);
+      } else {
+        res.status(404).json({ message: `Category with id ${id} not found` });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 
   //   static async DeleteOneCategoryById(req, res) {
   //     const { id } = req.params;
