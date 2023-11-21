@@ -12,7 +12,7 @@ class ProductController {
         const formattedProducts = Products.map((product) => ({
           id: product.id,
           title: product.title,
-          price: formatCurrency(product.price), // Apply formatting here
+          price: formatCurrency(product.price),
           stock: product.stock,
           CategoryId: product.CategoryId,
           createdAt: product.createdAt,
@@ -53,6 +53,7 @@ class ProductController {
       res.status(500).json({ message: error.message });
     }
   }
+
   static async PatchProductById(req, res) {
     const { id } = req.params;
     const { CategoryId } = req.body;
