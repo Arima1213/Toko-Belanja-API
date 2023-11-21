@@ -65,7 +65,11 @@ class UserController {
         };
       }
 
+      console.log(password);
+      console.log(userData.password);
+
       const isCorrect = comparePassword(password, userData.password);
+      console.log(isCorrect);
 
       if (!isCorrect) {
         throw {

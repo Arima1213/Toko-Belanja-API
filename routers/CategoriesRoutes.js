@@ -1,23 +1,9 @@
 const router = require('express').Router();
-const UserController = require('../controllers/userControllers');
-const { authorization } = require('../middlewares/UserAuthorization');
+const CategoryController = require('../controllers/categoryController');
+const { authorization } = require('../middlewares/AdminAuthorization');
 
-// router.get('/', UserController.getUsers);
+router.post('/', CategoryController.CreateCategory);
 
-// router.post('/register', UserController.register);
-
-// router.post('/login', UserController.login);
-
-// router.delete(
-//   '/:id',
-//   [authentication, authorization],
-//   UserController.DeleteUserById
-// );
-
-// router.put(
-//   '/:id',
-//   [authentication, authorization],
-//   UserController.UpdateUserById
-// );
+router.use('/', authorization);
 
 module.exports = router;

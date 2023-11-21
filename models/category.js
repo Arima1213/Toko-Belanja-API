@@ -20,11 +20,17 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isInt: true,
         },
+        defaultValue: 0,
       },
     },
     {
       sequelize,
       modelName: 'Category',
+      hooks: {
+        beforeCreate: (category) => {
+          category.sold_product_amount = 0;
+        },
+      },
     }
   );
 

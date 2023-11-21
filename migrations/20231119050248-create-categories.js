@@ -21,6 +21,7 @@ module.exports = {
         validate: {
           isInt: true,
         },
+        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,
