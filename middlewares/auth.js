@@ -36,7 +36,7 @@ const authentication = async (req, res, next) => {
     req.UserData = {
       id: UserData.id,
       email: UserData.email,
-      username: UserData.Username,
+      full_name: UserData.full_name,
     };
 
     if (!res.locals.User) {

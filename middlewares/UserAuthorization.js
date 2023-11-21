@@ -1,7 +1,7 @@
 const { User } = require('../models');
 
 function authorization(req, res, next) {
-  const userId = req.params.id;
+  const userId = res.locals.User.id;
   const authenticatedUser = res.locals.User;
 
   if (!authenticatedUser) {

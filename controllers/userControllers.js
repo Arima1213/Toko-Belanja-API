@@ -65,11 +65,7 @@ class UserController {
         };
       }
 
-      console.log(password);
-      console.log(userData.password);
-
       const isCorrect = comparePassword(password, userData.password);
-      console.log(isCorrect);
 
       if (!isCorrect) {
         throw {
@@ -94,24 +90,9 @@ class UserController {
 
   static async UpdateUserById(req, res) {
     try {
-      const id = +req.params.id;
-
-      // Check if ID is provided
-      if (isNaN(id)) {
-        return res.status(400).json({
-          message: 'Bad Request: ID parameter is missing or not a number.',
-        });
-      }
-
       const { full_name, email } = req.body;
 
-      const userData = req.UserData;
-
-      if (userData.id !== id) {
-        return res.status(403).json({
-          message: 'Forbidden: You are not allowed to update this user.',
-        });
-      }
+      const id = res.locals.User.id;
 
       const [updatedRowsCount, updatedRows] = await User.update(
         { full_name, email },
@@ -141,22 +122,7 @@ class UserController {
 
   static async DeleteUserById(req, res) {
     try {
-      const id = +req.params.id;
-
-      // Check if ID is provided
-      if (isNaN(id)) {
-        return res.status(400).json({
-          message: 'Bad Request: ID parameter is missing or not a number.',
-        });
-      }
-
-      const userData = req.UserData;
-
-      if (userData.id !== id) {
-        return res.status(403).json({
-          message: 'Forbidden: You are not allowed to delete this user.',
-        });
-      }
+      const id = res.locals.User.id;
 
       const deletedRowCount = await User.destroy({
         where: {
@@ -178,7 +144,7 @@ class UserController {
 
   static async topup(req, res) {
     try {
-      const idUser = req.UserData;
+      const idUser = res.locals.User;
       const { balance } = req.body;
 
       const userData = await User.findOne({

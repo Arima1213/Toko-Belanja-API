@@ -10,15 +10,11 @@ router.post('/login', UserController.login);
 router.post('/topup', authentication, UserController.topup);
 
 router.delete(
-  '/:id',
+  '/',
   [authentication, authorization],
   UserController.DeleteUserById
 );
 
-router.put(
-  '/:id',
-  [authentication, authorization],
-  UserController.UpdateUserById
-);
+router.put('/', [authentication, authorization], UserController.UpdateUserById);
 
 module.exports = router;
