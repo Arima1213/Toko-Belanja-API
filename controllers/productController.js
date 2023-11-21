@@ -1,4 +1,4 @@
-const { Product } = require('../models');
+const { Product, Category } = require('../models');
 const formatCurrency = require('../helpers/FormatCurrency');
 
 class ProductController {
@@ -26,7 +26,7 @@ class ProductController {
     }
   }
 
-  static async UpdateOneProductById(req, res) {
+  static async PutProductById(req, res) {
     const { id } = req.params;
     const { price, stock, title } = req.body;
 
@@ -53,23 +53,62 @@ class ProductController {
       res.status(500).json({ message: error.message });
     }
   }
+  static async PatchProductById(req, res) {
+    const { id } = req.params;
+    const { CategoryId } = req.body;
 
-  // static async DeleteOneProductById(req, res) {
-  //   const { id } = req.params;
-  //   try {
-  //     const deletedRowCount = await Product.destroy({ where: { id } });
+    try {
+      const categoryExists = await Category.findOne({
+        where: { id: CategoryId },
+      });
 
-  //     if (deletedRowCount > 0) {
-  //       res
-  //         .status(200)
-  //         .json({ message: `Product with id ${id} deleted successfully` });
-  //     } else {
-  //       res.status(404).json({ message: `Product with id ${id} not found` });
-  //     }
-  //   } catch (error) {
-  //     res.status(500).json({ message: error.message });
-  //   }
-  // }
+      if (!categoryExists) {
+        return res
+          .status(400)
+          .json({ message: `Category with id ${CategoryId} not found` });
+      }
+
+      const [updatedRowsCount, updatedRows] = await Product.update(
+        { CategoryId: CategoryId },
+        { where: { id }, returning: true }
+      );
+
+      if (updatedRowsCount > 0) {
+        const updatedProduct = {
+          id: updatedRows[0].id,
+          title: updatedRows[0].title,
+          price: formatCurrency(updatedRows[0].price),
+          stock: updatedRows[0].stock,
+          CategoryId: updatedRows[0].CategoryId,
+          createdAt: updatedRows[0].createdAt,
+          updatedAt: updatedRows[0].updatedAt,
+        };
+
+        res.status(200).json(updatedProduct);
+      } else {
+        res.status(404).json({ message: `Product with id ${id} not found` });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async DeleteOneProductById(req, res) {
+    const { id } = req.params;
+    try {
+      const deletedRowCount = await Product.destroy({ where: { id } });
+
+      if (deletedRowCount > 0) {
+        res
+          .status(200)
+          .json({ message: `Product with id ${id} deleted successfully` });
+      } else {
+        res.status(404).json({ message: `Product with id ${id} not found` });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 
   static async CreateProduct(req, res) {
     const { title, price, stock, CategoryId } = req.body;

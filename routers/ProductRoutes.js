@@ -6,8 +6,10 @@ router.post('/', authorization, ProductController.CreateProduct);
 
 router.get('/', ProductController.GetAllProducts);
 
-router.patch('/:id', authorization, ProductController.UpdateOneProductById);
+router.put('/:id', authorization, ProductController.PutProductById);
 
-// router.delete('/:id', authorization, CategoryController.DeleteOneCategoryById);
+router.patch('/:id', authorization, ProductController.PatchProductById);
+
+router.delete('/:id', authorization, ProductController.DeleteOneProductById);
 
 module.exports = router;
