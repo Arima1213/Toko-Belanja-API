@@ -37,7 +37,15 @@ class ProductController {
       );
 
       if (updatedRowsCount > 0) {
-        res.status(200).json(updatedRows[0]);
+        res.status(200).json({
+          id: updatedRows[0].id,
+          title: updatedRows[0].title,
+          price: formatCurrency(updatedRows[0].price),
+          stock: updatedRows[0].stock,
+          CategoryId: updatedRows[0].CategoryId,
+          createdAt: updatedRows[0].createdAt,
+          updatedAt: updatedRows[0].updatedAt,
+        });
       } else {
         res.status(404).json({ message: `Product with id ${id} not found` });
       }
