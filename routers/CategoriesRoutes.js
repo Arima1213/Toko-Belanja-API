@@ -8,4 +8,6 @@ router.get('/', CategoryController.GetAllCategories);
 
 router.patch('/:id', authorization, CategoryController.UpdateOneCategoryById);
 
+router.delete('/:id', authorization, CategoryController.DeleteOneCategoryById);
+
 module.exports = router;

@@ -17,23 +17,6 @@ class CategoryController {
     }
   }
 
-  //   static async GetOneCategoryById(req, res) {
-  //     const { id } = req.params;
-  //     try {
-  //       const Category = await Category.findByPk(id, {
-  //         include: [User, Photo],
-  //       });
-
-  //       if (Category) {
-  //         res.status(200).json(Category);
-  //       } else {
-  //         res.status(404).json({ message: 'Not Found' });
-  //       }
-  //     } catch (error) {
-  //       res.status(500).json({ message: error.message });
-  //     }
-  //   }
-
   static async UpdateOneCategoryById(req, res) {
     const { id } = req.params;
     const { type } = req.body;
@@ -54,22 +37,22 @@ class CategoryController {
     }
   }
 
-  //   static async DeleteOneCategoryById(req, res) {
-  //     const { id } = req.params;
-  //     try {
-  //       const deletedRowCount = await Category.destroy({ where: { id } });
+  static async DeleteOneCategoryById(req, res) {
+    const { id } = req.params;
+    try {
+      const deletedRowCount = await Category.destroy({ where: { id } });
 
-  //       if (deletedRowCount > 0) {
-  //         res
-  //           .status(200)
-  //           .json({ message: `Category with id ${id} deleted successfully` });
-  //       } else {
-  //         res.status(404).json({ message: `Category with id ${id} not found` });
-  //       }
-  //     } catch (error) {
-  //       res.status(500).json({ message: error.message });
-  //     }
-  //   }
+      if (deletedRowCount > 0) {
+        res
+          .status(200)
+          .json({ message: `Category with id ${id} deleted successfully` });
+      } else {
+        res.status(404).json({ message: `Category with id ${id} not found` });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 
   static async CreateCategory(req, res) {
     const { type } = req.body;
