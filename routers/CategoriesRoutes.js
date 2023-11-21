@@ -2,8 +2,8 @@ const router = require('express').Router();
 const CategoryController = require('../controllers/categoryController');
 const { authorization } = require('../middlewares/AdminAuthorization');
 
-router.post('/', CategoryController.CreateCategory);
+router.post('/', authorization, CategoryController.CreateCategory);
 
-router.use('/', authorization);
+router.get('/', CategoryController.GetAllCategories);
 
 module.exports = router;

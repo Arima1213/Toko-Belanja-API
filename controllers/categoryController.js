@@ -1,23 +1,21 @@
-const { Category } = require('../models');
+const { Category, product } = require('../models');
 
 class CategoryController {
-  //   static async GetAllCategorys(req, res) {
-  //     try {
-  //       const Categorys = await Category.findAll({
-  //         include: [Photo, User],
-  //       });
+  static async GetAllCategories(req, res) {
+    try {
+      const Categorys = await Category.findAll({
+        include: product,
+      });
 
-  //       if (Categorys.length === 0) {
-  //         // Tidak ada komentar ditemukan
-  //         res.status(404).json({ message: 'Tidak ada komentar yang tersedia.' });
-  //       } else {
-  //         // Komentar ditemukan
-  //         res.status(200).json(Categorys);
-  //       }
-  //     } catch (error) {
-  //       res.status(500).json({ message: error.message });
-  //     }
-  //   }
+      if (Categorys.length === 0) {
+        res.status(404).json({ message: 'Tidak ada category yang tersedia.' });
+      } else {
+        res.status(200).json(Categorys);
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 
   //   static async GetOneCategoryById(req, res) {
   //     const { id } = req.params;
