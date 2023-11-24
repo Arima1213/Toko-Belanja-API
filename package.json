@@ -21,7 +21,9 @@
     "test": "NODE_ENV=test jest --detectOpenHandles",
     "db:create:test": "NODE_ENV=test npx sequelize-cli db:create",
     "db:migrate:test": "NODE_ENV=test npx sequelize-cli db:migrate",
-    "db:migrate:prod": "NODE_ENV=production npx sequelize-cli db:migrate"
+    "db:migrate:prod": "NODE_ENV=production npx sequelize-cli db:migrate",
+        "db:seed": "npx sequelize-cli seed:generate --name 20231121013214-admin-user.js"
+
   },
   "repository": {
     "type": "git",
