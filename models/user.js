@@ -51,6 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isInt: true,
+          max: 100000000, // Max value set to 100 million
         },
       },
     },

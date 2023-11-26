@@ -155,8 +155,16 @@ class UserController {
         return res.status(400).json({ message: 'Invalid topup amount.' });
       }
 
+      const updatedBalance = userData.balance + balance;
+
+      if (updatedBalance >= 100000000) {
+        return res
+          .status(400)
+          .json({ message: 'Balance limit exceeded. Cannot top up.' });
+      }
+
       const updatedUser = await User.update(
-        { balance: userData.balance + balance },
+        { balance: updatedBalance },
         { where: { id: userData.id }, returning: true }
       );
 
