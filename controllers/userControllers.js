@@ -15,6 +15,13 @@ class UserController {
         };
       }
 
+      if (!full_name.trim()) {
+        throw {
+          code: 400,
+          message: 'Full name cannot be empty.',
+        };
+      }
+
       const userData = await User.findOne({
         where: {
           email: email,
@@ -44,7 +51,7 @@ class UserController {
         createdAt: result.created,
       });
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(error.code || 500).json({ message: error.message });
     }
   }
 
